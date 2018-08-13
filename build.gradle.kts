@@ -5,6 +5,7 @@ plugins {
     `java-library`
 
     kotlin("jvm") version "1.2.60"
+    kotlin("kapt") version "1.2.60"
 }
 
 group = "org.stvad"
@@ -15,8 +16,12 @@ repositories {
 }
 
 dependencies {
-    compile(kotlin("stdlib-jdk8"))
+    implementation("com.squareup.moshi:moshi:1.6.0")
 
+    kapt("com.squareup.moshi:moshi-kotlin-codegen:1.6.0")
+
+    compile(kotlin("stdlib-jdk8"))
+    compile("com.squareup", "kotlinpoet", "1.0.0-RC1")
     compile("com.amazon.alexa", "ask-sdk", "2.3.5")
 
     testCompile("junit", "junit", "4.12")
