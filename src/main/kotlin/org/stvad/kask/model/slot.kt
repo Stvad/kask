@@ -11,7 +11,15 @@ abstract class Slot<T>(val type: String, val askSlot: com.amazon.ask.model.Slot)
     //TODO(resolutions?)
 }
 
+interface SlotCompanion {
+    val type: String
+}
+
 class DurationSlot(askSlot: com.amazon.ask.model.Slot) : Slot<Period>("AMAZON.DURATION", askSlot) {
+    companion object : SlotCompanion {
+        override val type = "AMAZON.DURATION"
+    }
+
     override val value: Period?
         get() = askSlot.value?.let { Period.parse(it) }
 }
