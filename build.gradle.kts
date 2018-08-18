@@ -23,6 +23,8 @@ dependencies {
 
     compile("com.squareup", "kotlinpoet", "1.0.0-RC1")
     compile("com.amazon.alexa", "ask-sdk", "2.3.5")
+
+    testCompile("io.kotlintest:kotlintest-runner-junit5:3.1.9")
 }
 
 configure<JavaPluginConvention> {
@@ -31,4 +33,8 @@ configure<JavaPluginConvention> {
 
 tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
+}
+
+val test by tasks.getting(Test::class) {
+    useJUnitPlatform { }
 }
