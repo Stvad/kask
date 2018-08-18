@@ -5,15 +5,9 @@ import com.amazon.ask.model.DialogState
 import com.amazon.ask.model.Intent
 import com.amazon.ask.model.IntentRequest
 import com.amazon.ask.model.Response
-import org.stvad.kask.SlotMissingException
 import java.util.Optional
 
 abstract class BasicIntentRequestHandler(private vararg val intents: String) : NullSafeRequestHandler {
-    companion object {
-        fun Intent.requireSlot(slotName: Any) = slots[slotName.toString()]
-                ?: throw SlotMissingException("The slot $slotName is missing. Please check validity of your model.")
-    }
-
     override fun canHandleSafely(input: HandlerInput) = canHandleIntents(input, intents)
 
     val HandlerInput.intentRequest get() = (requestEnvelope.request as IntentRequest)

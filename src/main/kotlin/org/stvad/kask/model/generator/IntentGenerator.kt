@@ -17,6 +17,9 @@ import org.stvad.kask.model.Intent
 import org.stvad.kask.model.IntentCompanion
 import org.stvad.kask.model.IntentDefinition
 import org.stvad.kask.model.SlotDefinition
+import org.stvad.kask.requireSlot
+import org.stvad.verse.toInvocation
+import org.stvad.verse.toProperties
 import com.amazon.ask.model.Intent as ASKIntent
 
 const val amazonPrefix = "AMAZON."
@@ -28,10 +31,10 @@ const val amazonPrefix = "AMAZON."
 class IntentGenerator(private val intentDefinition: IntentDefinition,
                       private val prefixesToRemove: List<String> = listOf(amazonPrefix)) {
 
-    fun List<ParameterSpec>.toInvocation() = map(ParameterSpec::name).joinToString()
-    fun List<ParameterSpec>.toProperties() = map { it.toProperty() }
+    companion object {
+        val requiredImports = listOf("org.stvad.kask" to ASKIntent::requireSlot.name)
+    }
 
-    fun ParameterSpec.toProperty() = PropertySpec.builder(name, type).initializer(name).build()
 
     fun String.removePrefixes(prefixes: List<String>) =
             prefixes.find { this.startsWith(it) }?.let { this.removePrefix(it) } ?: this
@@ -78,11 +81,13 @@ class IntentGenerator(private val intentDefinition: IntentDefinition,
             .addFunction(companionIntentIntentInitializer)
             .build()
 
-    private val askIntentParameter = ParameterSpec.builder("askIntent", ASKIntent::class).build()
+    private val askIntentParameter = ParameterSpec.builder(Intent::askIntent.name, ASKIntent::class).build()
 
     private fun slotInitializerInvocation(slotDefinition: SlotDefinition) =
-            CodeBlock.of("%T(${askIntentParameter.name}.requireSlot(%S))",
+            CodeBlock.of("%T(${askIntentParameter.name}.${ASKIntent::requireSlot.name}(%S))",
+//            CodeBlock.of("%T(${askIntentParameter.name}.%T(%S))",
                     getSlotClass(slotDefinition),
+//                    ASKIntent::requireSlot,
                     slotDefinition.name)
 
     private fun slotInitializers() =
@@ -96,11 +101,10 @@ class IntentGenerator(private val intentDefinition: IntentDefinition,
                     .add("return %T(", className)
                     .add(askIntentParameter.name)
                     .add(slotInitializers())
-//                    .add(", ")
                     .add(")")
                     .build()
 
-    private val companionIntentIntentInitializer = FunSpec.builder("fromAskIntent")
+    private val companionIntentIntentInitializer = FunSpec.builder(IntentCompanion<Any>::fromAskIntent.name)
             .addParameter(askIntentParameter)
             .addModifiers(KModifier.OVERRIDE)
             .addCode(intentInitializerCode)
@@ -108,7 +112,7 @@ class IntentGenerator(private val intentDefinition: IntentDefinition,
             .build()
 
     private val companionNameProperty =
-            PropertySpec.builder("name", String::class, KModifier.OVERRIDE)
+            PropertySpec.builder(IntentCompanion<Any>::name.name, String::class, KModifier.OVERRIDE)
                     .initializer("%S", intentDefinition.name)
                     .build()
 
