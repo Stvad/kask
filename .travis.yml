@@ -15,4 +15,4 @@ cache:
   - $HOME/.m2/repository/
 
 script:
-- ./gradlew build --scan -s
+- ./gradlew build -s
