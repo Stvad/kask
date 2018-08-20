@@ -6,13 +6,15 @@ plugins {
 
     kotlin("jvm") version "1.2.60"
     kotlin("kapt") version "1.2.60"
+
+    jacoco
 }
 
 group = "org.stvad"
 version = "0.1.0"
 
 repositories {
-    mavenCentral()
+    jcenter()
 }
 
 dependencies {
@@ -23,6 +25,7 @@ dependencies {
 
     compile("com.squareup", "kotlinpoet", "1.0.0-RC1")
     compile("com.amazon.alexa", "ask-sdk", "2.3.5")
+    compile("com.github.debop:koda-time:1.2.1")
 
     testCompile("io.kotlintest:kotlintest-runner-junit5:3.1.9")
 }
