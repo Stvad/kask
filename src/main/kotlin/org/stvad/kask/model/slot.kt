@@ -27,7 +27,11 @@ class PhoneNumber(private val number: String) : CharSequence by number
  * The Phrase slot types (AMAZON.SearchQuery & List Slot types) are not implemented explicitly, but the intention is to
  * generate them as needed based on StringSlot.
  */
-val supportedAmazonSlots = listOf(DurationSlot::class, NumberSlot::class, FourDigitNumberSlot::class)
+val supportedAmazonSlots = mapOf(DurationSlot.type to DurationSlot::class,
+        NumberSlot.type to NumberSlot::class,
+        FourDigitNumberSlot.type to FourDigitNumberSlot::class,
+        TimeSlot.type to TimeSlot::class,
+        PhoneNumberSlot.type to PhoneNumberSlot::class)
 
 /**
  * https://developer.amazon.com/docs/custom-skills/slot-type-reference.html#duration
@@ -37,8 +41,7 @@ class DurationSlot(askSlot: com.amazon.ask.model.Slot) : Slot<Period>(askSlot) {
         override val type = "AMAZON.DURATION"
     }
 
-    override val value: Period?
-        get() = stringValue?.let { Period.parse(it) }
+    override val value get() = stringValue?.let { Period.parse(it) }
 }
 
 /**
@@ -57,8 +60,9 @@ class TimeSlot(askSlot: com.amazon.ask.model.Slot,
         )
     }
 
-    override val value: LocalTime?
-        get() = fuzzyTimeMap.getOrDefault(stringValue, stringValue)?.toLocalTime()
+    constructor(askSlot: com.amazon.ask.model.Slot) : this(askSlot, defaultFuzzyTimeMap)
+
+    override val value get() = fuzzyTimeMap.getOrDefault(stringValue, stringValue)?.toLocalTime()
 }
 
 /**
@@ -81,3 +85,15 @@ class FourDigitNumberSlot(askSlot: com.amazon.ask.model.Slot) : NumberSlot(askSl
     }
 }
 
+class PhoneNumberSlot(askSlot: com.amazon.ask.model.Slot) : Slot<PhoneNumber>(askSlot) {
+    companion object : SlotCompanion {
+        override val type = "AMAZON.PhoneNumber"
+    }
+
+    override val value get() = stringValue?.let { PhoneNumber(it) }
+}
+
+open class StringSlot(askSlot: com.amazon.ask.model.Slot) : Slot<String>(askSlot) {
+    override val value get() = stringValue
+
+}
