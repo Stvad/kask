@@ -4,9 +4,10 @@ import com.amazon.ask.model.Slot
 import com.github.debop.kodatimes.months
 import com.github.debop.kodatimes.toLocalTime
 import io.kotlintest.forAll
+import io.kotlintest.matchers.collections.shouldHaveSize
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
-import kotlin.reflect.full.primaryConstructor
+import org.stvad.kask.model.Slot as KaskSlot
 
 
 class SlotSpec : WordSpec({
@@ -14,8 +15,18 @@ class SlotSpec : WordSpec({
 
     "AllSlots" should {
         "handle null values in askSlot.value" {
-            forAll(supportedAmazonSlots.map { it.primaryConstructor }) { SlotType ->
-                SlotType!!.call(emptySlot).value shouldBe null
+            val supportedSlotTypes =
+                    listOf(::NumberSlot,
+                            ::FourDigitNumberSlot,
+                            ::DurationSlot,
+                            ::TimeSlot,
+                            ::PhoneNumberSlot,
+                            ::StringSlot)
+
+            supportedSlotTypes.shouldHaveSize(supportedAmazonSlots.size + 1)
+
+            forAll(supportedSlotTypes) { SlotConstructor ->
+                SlotConstructor.call(emptySlot).value shouldBe null
             }
         }
     }
