@@ -5,6 +5,7 @@ import com.amazon.ask.dispatcher.request.handler.RequestHandler
 import com.amazon.ask.model.Request
 import com.amazon.ask.model.Response
 import com.amazon.ask.request.Predicates
+import org.stvad.kask.model.IntentCompanion
 import java.util.Optional
 import java.util.Optional.empty
 import java.util.function.Predicate
@@ -24,6 +25,10 @@ abstract class LambdaRequestHandler(private val handler: (HandlerInput) -> Optio
 
 fun handle(vararg intents: String, handler: (HandlerInput) -> Optional<Response>) = object : LambdaRequestHandler(handler) {
     override fun canHandleSafely(input: HandlerInput) = canHandleIntents(input, intents)
+}
+
+fun handle(vararg intents: IntentCompanion<out Any>, handler: (HandlerInput) -> Optional<Response>) = object : LambdaRequestHandler(handler) {
+    override fun canHandleSafely(input: HandlerInput) = canHandleIntents(input, intents.map { it.name }.toTypedArray())
 }
 
 fun canHandleIntents(input: HandlerInput, intents: Array<out String>) =
