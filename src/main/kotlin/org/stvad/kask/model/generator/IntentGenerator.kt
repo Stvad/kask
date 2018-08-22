@@ -17,6 +17,7 @@ import org.stvad.kask.model.Intent
 import org.stvad.kask.model.IntentCompanion
 import org.stvad.kask.model.IntentDefinition
 import org.stvad.kask.model.SlotDefinition
+import org.stvad.kask.model.supportedAmazonSlots
 import org.stvad.kask.requireSlot
 import org.stvad.verse.toInvocation
 import org.stvad.verse.toProperties
@@ -69,7 +70,7 @@ class IntentGenerator(private val intentDefinition: IntentDefinition,
                 ParameterSpec.builder(it.name, getSlotClass(it)).build()
             }
 
-    private fun getSlotClass(slotDefinition: SlotDefinition) = slotTypeMap[slotDefinition.type]
+    private fun getSlotClass(slotDefinition: SlotDefinition) = supportedAmazonSlots[slotDefinition.type]
             ?: TODO("make this a call to slot generator, ")
 
 
@@ -85,9 +86,7 @@ class IntentGenerator(private val intentDefinition: IntentDefinition,
 
     private fun slotInitializerInvocation(slotDefinition: SlotDefinition) =
             CodeBlock.of("%T(${askIntentParameter.name}.${ASKIntent::requireSlot.name}(%S))",
-//            CodeBlock.of("%T(${askIntentParameter.name}.%T(%S))",
                     getSlotClass(slotDefinition),
-//                    ASKIntent::requireSlot,
                     slotDefinition.name)
 
     private fun slotInitializers() =

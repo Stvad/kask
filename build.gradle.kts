@@ -28,6 +28,7 @@ dependencies {
     compile("com.github.debop:koda-time:1.2.1")
 
     testCompile("io.kotlintest:kotlintest-runner-junit5:3.1.9")
+    testImplementation("io.mockk:mockk:1.8.6")
 }
 
 configure<JavaPluginConvention> {

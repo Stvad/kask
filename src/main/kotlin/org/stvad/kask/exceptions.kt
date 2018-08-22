@@ -5,3 +5,5 @@ open class KaskException(message: String? = null, cause: Throwable? = null) : Ru
 class InvalidModelException(message: String? = null, cause: Throwable? = null) : KaskException(message, cause)
 
 class SlotMissingException(message: String? = null, cause: Throwable? = null) : KaskException(message, cause)
+
+class CodeGenerationError(message: String? = null, cause: Throwable? = null) : KaskException(message, cause)
