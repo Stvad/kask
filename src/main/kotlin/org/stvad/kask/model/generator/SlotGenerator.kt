@@ -1,6 +1,8 @@
 package org.stvad.kask.model.generator
 
-import org.stvad.kask.model.DurationSlot
+import com.squareup.kotlinpoet.TypeSpec
+import org.stvad.kask.model.SlotDefinition
 
-val slotTypeMap = mapOf(DurationSlot.type to DurationSlot::class)
-//        .withDefault {  } probably should generate a type here
+interface SlotGenerator {
+    fun generate(slotDefinition: SlotDefinition): TypeSpec
+}
