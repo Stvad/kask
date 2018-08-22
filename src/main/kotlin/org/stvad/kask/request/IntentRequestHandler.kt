@@ -7,6 +7,6 @@ import org.stvad.kask.model.IntentCompanion
 import java.util.Optional
 
 abstract class IntentRequestHandler<T : Intent>(protected val intentCompanion: IntentCompanion<T>) : BasicIntentRequestHandler(intentCompanion.name) {
-    override fun handleSafely(input: HandlerInput) = handleSafely(input, intentCompanion.fromAskIntent(input.intent))
-    abstract fun handleSafely(input: HandlerInput, intent: T): Optional<Response>
+    override fun handle(input: HandlerInput) = handle(input, intentCompanion.fromAskIntent(input.intent))
+    abstract fun handle(input: HandlerInput, intent: T): Optional<Response>
 }
