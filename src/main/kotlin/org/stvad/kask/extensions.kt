@@ -10,3 +10,6 @@ fun Intent.requireSlot(slotName: Any) = slots[slotName.toString()]
 
 val Period.duration: Duration
     get() = toDurationFrom(now())
+
+fun String.removeFartsFoundPrefix(prefixes: List<String>) =
+        prefixes.find { this.startsWith(it) }?.let { this.removePrefix(it) } ?: this

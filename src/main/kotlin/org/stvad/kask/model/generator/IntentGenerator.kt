@@ -17,13 +17,13 @@ import org.stvad.kask.model.Intent
 import org.stvad.kask.model.IntentCompanion
 import org.stvad.kask.model.IntentDefinition
 import org.stvad.kask.model.SlotDefinition
+import org.stvad.kask.model.amazonPrefix
 import org.stvad.kask.model.supportedAmazonSlots
+import org.stvad.kask.removeFartsFoundPrefix
 import org.stvad.kask.requireSlot
 import org.stvad.verse.toInvocation
 import org.stvad.verse.toProperties
 import com.amazon.ask.model.Intent as ASKIntent
-
-const val amazonPrefix = "AMAZON."
 
 //todo consider generating tests for generated code :p?
 //TODO allow passing custom mapping for the slot types to allow custom slot support and override of defaults
@@ -36,11 +36,7 @@ class IntentGenerator(private val intentDefinition: IntentDefinition,
         val requiredImports = listOf("org.stvad.kask" to ASKIntent::requireSlot.name)
     }
 
-
-    fun String.removePrefixes(prefixes: List<String>) =
-            prefixes.find { this.startsWith(it) }?.let { this.removePrefix(it) } ?: this
-
-    private val className = ClassName("", intentDefinition.name.removePrefixes(prefixesToRemove))
+    private val className = ClassName("", intentDefinition.name.removeFartsFoundPrefix(prefixesToRemove))
 
     //todo make dataclass
     fun generate() =
@@ -81,8 +77,6 @@ class IntentGenerator(private val intentDefinition: IntentDefinition,
             .addProperty(companionNameProperty)
             .addFunction(companionIntentIntentInitializer)
             .build()
-
-    private val askIntentParameter = ParameterSpec.builder(Intent::askIntent.name, ASKIntent::class).build()
 
     private fun slotInitializerInvocation(slotDefinition: SlotDefinition) =
             CodeBlock.of("%T(${askIntentParameter.name}.${ASKIntent::requireSlot.name}(%S))",
