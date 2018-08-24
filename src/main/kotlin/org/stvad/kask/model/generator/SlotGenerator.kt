@@ -20,7 +20,7 @@ class PoeticSlotGenerator(private val prefixesToRemove: List<String> = listOf(am
                     .primaryConstructor(constructor())
                     .build()
 
-    private fun classNameFor(slotDefinition: SlotDefinition) = slotDefinition.name.removeFartsFoundPrefix(prefixesToRemove)
+    private fun classNameFor(slotDefinition: SlotDefinition) = slotDefinition.type.removeFartsFoundPrefix(prefixesToRemove)
     private fun constructor() = constructorBuilder().addParameters(superclassParameters()).build()
 
     private fun superclassParameters() = listOf(askSlotParameter)

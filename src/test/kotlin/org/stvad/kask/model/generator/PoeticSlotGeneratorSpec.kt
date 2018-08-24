@@ -10,7 +10,7 @@ class PoeticSlotGeneratorSpec : WordSpec({
         "return typespec with the name where specified prefix was removed" {
             val prefix = "prefix."
             val suffix = "suffix"
-            val slotDefinition = createDummySlot(name = prefix + suffix)
+            val slotDefinition = createDummySlot(type = prefix + suffix)
 
             PoeticSlotGenerator(listOf(prefix)).generate(slotDefinition).name shouldBe suffix
         }
