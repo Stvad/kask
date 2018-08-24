@@ -10,10 +10,10 @@ import kotlin.reflect.KClass
 
 interface SlotVendor {
     fun classNameForSlot(slot: SlotDefinition): ClassName
-    val generatedSlots: List<TypeSpec>
+    val generatedSlots: Set<TypeSpec>
 }
 
-class PoeticSlotVendor(private val slotGenerator: SlotGenerator,
+class PoeticSlotVendor(private val slotGenerator: SlotGenerator = PoeticSlotGenerator(),
                        private val overrideMap: Map<String, KClass<out Any>> = emptyMap()) : SlotVendor {
 
 
@@ -22,7 +22,7 @@ class PoeticSlotVendor(private val slotGenerator: SlotGenerator,
                 ?: generateSlot(slotDefinition)
     }
 
-    override val generatedSlots = mutableListOf<TypeSpec>()
+    override val generatedSlots = mutableSetOf<TypeSpec>()
 
     private fun generateSlot(slotDefinition: SlotDefinition): ClassName {
         val generatedSpec = slotGenerator.generate(slotDefinition)
