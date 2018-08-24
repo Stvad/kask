@@ -18,7 +18,9 @@ data class Dialog(val intents: List<Any>)
 data class LanguageModel(val invocationName: String, @Json(name = "intents") val intentDefinitions: List<IntentDefinition>, val types: List<Any>)
 
 @JsonClass(generateAdapter = true)
-data class IntentDefinition(val name: String, val samples: List<String>, @Json(name = "slots") val slotDefinitions: List<SlotDefinition> = emptyList())
+data class IntentDefinition(val name: String,
+                            val samples: List<String> = emptyList(),
+                            @Json(name = "slots") val slotDefinitions: List<SlotDefinition> = emptyList())
 
 @JsonClass(generateAdapter = true)
-data class SlotDefinition(val name: String, val type: String, val samples: List<String>)
+data class SlotDefinition(val name: String, val type: String, val samples: List<String> = emptyList())
