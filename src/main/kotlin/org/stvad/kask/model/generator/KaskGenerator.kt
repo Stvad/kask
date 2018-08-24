@@ -1,5 +1,6 @@
 package org.stvad.kask.model.generator
 
+import arrow.core.Try
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.moshi.Moshi
 import org.stvad.kask.InvalidModelException
@@ -16,14 +17,26 @@ object KaskGenerator {
     fun generateAlexaModel(packageName: String, modelPath: File, outputPath: File) {
         val intentDefinitions = getIntentDefinitions(modelPath)
 
-        val intents = FileSpec.builder(packageName, fileName).apply {
-            intentDefinitions.map { IntentGenerator(it).generate() }.forEach { addType(it) }
-        }
-        IntentGenerator.requiredImports.forEach { intents.addImport(it.first, it.second) }
-
-        intents.addComment(generatedNotificationComment)
-                .build()
+        generateAlexaModelSpec(packageName, intentDefinitions)
                 .writeTo(outputPath)
+    }
+
+    fun generateAlexaModelSpec(packageName: String, intentDefinitions: List<IntentDefinition>): FileSpec {
+        val slotVendor = PoeticSlotVendor()
+
+        val alexaModelSpec = FileSpec.builder(packageName, fileName).apply {
+            intentDefinitions.map { Try { IntentGenerator(it, slotVendor).generate() } }.forEach {
+                it.fold({ addComment("Failed to generate an Intent type with the following error: $it\n") },
+                        { addType(it) })
+            }
+
+            slotVendor.generatedSlots.forEach { addType(it) }
+        }
+        IntentGenerator.requiredImports.forEach { alexaModelSpec.addImport(it.first, it.second) }
+
+        return alexaModelSpec
+                .addComment(generatedNotificationComment)
+                .build()
     }
 
     private fun getIntentDefinitions(modelPath: File): List<IntentDefinition> {

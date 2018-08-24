@@ -27,6 +27,15 @@ dependencies {
     compile("com.amazon.alexa", "ask-sdk", "2.3.5")
     compile("com.github.debop:koda-time:1.2.1")
 
+    val arrowVersion = "0.7.3"
+    compile("io.arrow-kt:arrow-core:$arrowVersion")
+    compile("io.arrow-kt:arrow-syntax:$arrowVersion")
+    compile("io.arrow-kt:arrow-typeclasses:$arrowVersion")
+    compile("io.arrow-kt:arrow-data:$arrowVersion")
+    compile("io.arrow-kt:arrow-instances-core:$arrowVersion")
+    compile("io.arrow-kt:arrow-instances-data:$arrowVersion")
+    kapt("io.arrow-kt:arrow-annotations-processor:$arrowVersion")
+
     testCompile("io.kotlintest:kotlintest-runner-junit5:3.1.9")
     testImplementation("io.mockk:mockk:1.8.6")
 }
