@@ -13,3 +13,5 @@ val Period.duration: Duration
 
 fun String.removeFartsFoundPrefix(prefixes: List<String>) =
         prefixes.find { this.startsWith(it) }?.let { this.removePrefix(it) } ?: this
+
+fun String.isAlphaNum() = matches("[A-Za-z0-9]+".toRegex())
