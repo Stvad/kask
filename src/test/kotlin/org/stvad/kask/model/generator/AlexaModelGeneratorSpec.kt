@@ -2,7 +2,11 @@ package org.stvad.kask.model.generator
 
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.TypeSpec
+import io.kotlintest.Description
+import io.kotlintest.Spec
+import io.kotlintest.extensions.TestListener
 import io.kotlintest.specs.WordSpec
+import io.mockk.clearConstructorMockk
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkConstructor
@@ -42,4 +46,7 @@ class AlexaModelGeneratorSpec : WordSpec({
     }
 }) {
     override fun isInstancePerTest() = true
+    override fun listeners(): List<TestListener> = listOf(object : TestListener {
+        override fun afterSpec(description: Description, spec: Spec) = clearConstructorMockk(IntentGenerator::class)
+    })
 }
