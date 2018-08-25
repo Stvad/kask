@@ -51,3 +51,12 @@ tasks.withType<KotlinCompile> {
 val test by tasks.getting(Test::class) {
     useJUnitPlatform { }
 }
+
+tasks.withType<JacocoReport> {
+    reports {
+        xml.isEnabled = true
+    }
+
+    val check by tasks
+    check.dependsOn(this)
+}
