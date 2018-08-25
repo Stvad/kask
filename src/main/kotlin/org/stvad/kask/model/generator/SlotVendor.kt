@@ -9,7 +9,7 @@ import org.stvad.kask.model.supportedAmazonSlots
 import kotlin.reflect.KClass
 
 interface SlotVendor {
-    fun classNameForSlot(slot: SlotDefinition): ClassName
+    fun classNameForSlot(slotDefinition: SlotDefinition): ClassName
     val generatedSlots: Set<TypeSpec>
 }
 
