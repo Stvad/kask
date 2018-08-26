@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.gradle.api.tasks.bundling.Jar
 
 plugins {
     java
@@ -60,4 +61,24 @@ tasks.withType<JacocoReport> {
 
     val check by tasks
     check.dependsOn(this)
+}
+
+val sourcesJar by tasks.registering(Jar::class) {
+    classifier = "sources"
+    from(sourceSets["main"].allSource)
+}
+
+publishing {
+    repositories {
+        maven {
+            url = uri("$buildDir/repository")
+        }
+    }
+    publications {
+        register("mavenJava", MavenPublication::class) {
+            from(components["java"])
+            artifact(sourcesJar.get())
+            groupId = "com.github.Stvad"
+        }
+    }
 }
