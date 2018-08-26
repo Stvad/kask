@@ -8,6 +8,7 @@ plugins {
     kotlin("kapt") version "1.2.60"
 
     jacoco
+    `maven-publish`
 }
 
 group = "org.stvad"
