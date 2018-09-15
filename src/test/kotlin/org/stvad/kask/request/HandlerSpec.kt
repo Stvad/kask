@@ -7,9 +7,11 @@ import com.amazon.ask.model.IntentRequest
 import com.amazon.ask.model.LaunchRequest
 import com.amazon.ask.model.Request
 import com.amazon.ask.model.RequestEnvelope
+import com.amazon.ask.response.ResponseBuilder
 import io.kotlintest.Matcher
 import io.kotlintest.Result
 import io.kotlintest.should
+import io.kotlintest.shouldBe
 import io.kotlintest.specs.WordSpec
 import java.util.Optional.empty
 
@@ -48,6 +50,19 @@ class HandlerSpec : WordSpec({
             val requestTypes = arrayOf(IntentRequest::class, LaunchRequest::class)
             val requests = arrayOf(IntentRequest.builder().build(), LaunchRequest.builder().build())
             handle(*requestTypes) { empty() } should handleRequestsWithIntents(*requests)
+        }
+    }
+
+    "Handlers with ResponseContext" should {
+        "build response with data provided in the context" {
+            val intentName = "testIntent"
+            val testSpeech = "testSpeech"
+
+            val response = respond(intentName) {
+                withSpeech(testSpeech)
+            }.handle(handlerInputForIntent(intentName))
+
+            response shouldBe ResponseBuilder().withSpeech(testSpeech).build()
         }
     }
 })
