@@ -5,8 +5,8 @@ plugins {
     java
     `java-library`
 
-    kotlin("jvm") version "1.2.60"
-    kotlin("kapt") version "1.2.60"
+    kotlin("jvm") version "1.2.70"
+    kotlin("kapt") version "1.2.70"
 
     jacoco
     `maven-publish`
