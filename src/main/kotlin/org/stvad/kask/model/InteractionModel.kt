@@ -9,13 +9,15 @@ data class InteractionModelEnvelope(val interactionModel: InteractionModel) {
 }
 
 @JsonClass(generateAdapter = true)
-data class InteractionModel(val languageModel: LanguageModel, val prompts: List<Any>)
+data class InteractionModel(val languageModel: LanguageModel, val prompts: List<Any> = emptyList())
 
 @JsonClass(generateAdapter = true)
-data class Dialog(val intents: List<Any>)
+data class Dialog(val intents: List<Any> = emptyList())
 
 @JsonClass(generateAdapter = true)
-data class LanguageModel(val invocationName: String, @Json(name = "intents") val intentDefinitions: List<IntentDefinition>, val types: List<Any>)
+data class LanguageModel(val invocationName: String,
+                         @Json(name = "intents") val intentDefinitions: List<IntentDefinition> = emptyList(),
+                         val types: List<Any> = emptyList())
 
 @JsonClass(generateAdapter = true)
 data class IntentDefinition(val name: String,
