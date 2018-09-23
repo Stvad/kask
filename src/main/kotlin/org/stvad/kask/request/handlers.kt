@@ -22,12 +22,16 @@ fun handle(vararg intents: String, handler: (HandlerInput) -> Optional<Response>
     override fun canHandle(input: HandlerInput) = canHandleIntents(input, intents)
 }
 
+fun handle(handler: (HandlerInput) -> Optional<Response>, vararg intents: String) = handle(*intents, handler = handler)
+
 fun respond(vararg intents: String, responseContext: ResponseContext) =
         handle(*intents) { it.respond(responseContext) }
 
 fun handle(vararg intents: IntentCompanion<out Any>, handler: (HandlerInput) -> Optional<Response>) = object : LambdaRequestHandler(handler) {
     override fun canHandle(input: HandlerInput) = canHandleIntents(input, intents.map { it.name }.toTypedArray())
 }
+
+fun handle(handler: (HandlerInput) -> Optional<Response>, vararg intents: IntentCompanion<out Any>) = handle(*intents, handler = handler)
 
 fun respond(vararg intents: IntentCompanion<out Any>, responseContext: ResponseContext) =
         handle(*intents) { it.respond(responseContext) }
@@ -38,6 +42,9 @@ fun <T : Request> handle(vararg requestTypes: KClass<out T>, handler: (HandlerIn
                     .map { requestType(it.java) }
                     .reduce(Predicate<HandlerInput>::or))
 }
+
+fun <T : Request> handle(handler: (HandlerInput) -> Optional<Response>, vararg requestTypes: Class<out T>) =
+        handle(*requestTypes.map { it.kotlin }.toTypedArray(), handler = handler)
 
 fun <T : Request> respond(vararg requestTypes: KClass<out T>, responseContext: ResponseContext) =
         handle(*requestTypes) { it.respond(responseContext) }
