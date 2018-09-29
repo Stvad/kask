@@ -6,6 +6,7 @@
 A Kotlin library designed to improve an experience of developing Alexa skills on JVM.   
 It's based on official [ASK SDK for Java](https://github.com/alexa/alexa-skills-kit-sdk-for-java).  
 You can find the complete working example (Kotlin and Java) here: https://github.com/Stvad/hello-kask 
+
 ---
 
 ## Why would you want to use this
@@ -91,7 +92,7 @@ To unpack this example a little:
 
 Kask provides you an ability to concisely handle various requests or intents via Functional Handlers.
 
-####Some examples
+#### Examples
 **Handle LaunchRequest**  
 *Kotlin*
 ```kotlin
