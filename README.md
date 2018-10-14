@@ -193,7 +193,7 @@ To do that you need make two changes to your gradle project:
     **build.gradle.kts:**
     ```kotlin
     plugins{
-        id("org.stvad.kask") version "0.1.4"
+        id("org.stvad.kask") version "0.1.5"
     }
     ```
     
