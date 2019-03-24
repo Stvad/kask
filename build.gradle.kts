@@ -1,5 +1,4 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.gradle.api.tasks.bundling.Jar
 
 plugins {
     java
@@ -25,7 +24,7 @@ dependencies {
     kapt("com.squareup.moshi:moshi-kotlin-codegen:1.6.0")
     compile(kotlin("stdlib-jdk8"))
 
-    api("com.amazon.alexa", "ask-sdk", "2.6.+")
+    api("com.amazon.alexa", "ask-sdk", "2.14.+")
 
     compile("com.squareup", "kotlinpoet", "1.0.0-RC1")
     compile("com.github.debop:koda-time:1.2.1")
